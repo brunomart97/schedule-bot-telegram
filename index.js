@@ -18,7 +18,7 @@ const formatDate = date => {
 
 const showTask = async (ctx, taskId, newMessage = false) => {
   const task = await getTask(taskId);
-  const conclusion = tark.dt_conclusion && `\n<b>Concluída em:</b> ${formatDate(task.dt_conclusion)}`;
+  const conclusion = task.dt_conclusion && `\n<b>Concluída em:</b> ${formatDate(task.dt_conclusion)}`;
   const message = `
     <b>${task.description}</b>
     <b>Previsão:</b> ${formatDate(task.dt_prediction)}${conclusion}
@@ -30,4 +30,13 @@ const showTask = async (ctx, taskId, newMessage = false) => {
   } else {
     CacheStorage.editMessageText(message, buttonsTask(taskId));
   }
+};
+
+const buttonsSchedule = tasks => {
+  const buttons = tasks.map(item => {
+    const date = item.dt_prediction && `${moment(item.dt_prediction).format('DD/MM/YYYY')}`;
+    return [Markup.callbackButton(`${date}${item.description}`, `show ${item.id}`)];
+  });
+
+  return Extra.markup(Markup.inlineKeyboards(buttons, {columns: 1}));
 };
