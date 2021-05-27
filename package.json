@@ -1,0 +1,27 @@
+{
+  "name": "schedule-bot-telegram",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "json-server --watch db.json --port 3001"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brunomart97/schedule-bot-telegram.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brunomart97/schedule-bot-telegram/issues"
+  },
+  "homepage": "https://github.com/brunomart97/schedule-bot-telegram#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "json-server": "^0.16.3",
+    "moment": "^2.29.1",
+    "node-schedule": "^2.0.0",
+    "telegraf": "^4.3.0"
+  }
+}
