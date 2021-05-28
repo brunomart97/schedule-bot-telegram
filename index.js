@@ -40,3 +40,10 @@ const buttonsSchedule = tasks => {
 
   return Extra.markup(Markup.inlineKeyboards(buttons, {columns: 1}));
 };
+
+const buttonsTask = idTask => Extra.HTML().markup(Markup.inlineKeyboard([
+  Markup.callbackButton('✔️', `concluir ${idTask}`),
+  Markup.callbackButton('🗓️', `setData ${idTask}`),
+  Markup.callbackButton('📝', `addNota ${idTask}`),
+  Markup.callbackButton('❌', `excluir ${idTask}`)
+], {columns: 4}));
