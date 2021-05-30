@@ -1,7 +1,7 @@
-const env = require('./env');
+const env = require('./.env');
 const Telegraf = require('telegraf');
 const Extra = require('telegraf/extra');
-const Markup = require('telegram/markup');
+const Markup = require('telegraf/markup');
 const moment = require('moment');
 const { getSchedule, getTask } = require('./scheduleServices');
 
@@ -28,17 +28,17 @@ const showTask = async (ctx, taskId, newMessage = false) => {
   if(newMessage) {
     ctx.reply(message, buttonsTask(taskId));
   } else {
-    CacheStorage.editMessageText(message, buttonsTask(taskId));
+    ctx.editMessageText(message, buttonsTask(taskId));
   }
 };
 
 const buttonsSchedule = tasks => {
   const buttons = tasks.map(item => {
-    const date = item.dt_prediction && `${moment(item.dt_prediction).format('DD/MM/YYYY')}`;
-    return [Markup.callbackButton(`${date}${item.description}`, `show ${item.id}`)];
+    const date = item.dt_prediction && `${moment(item.dt_prediction).format('DD/MM/YYYY')} - `;
+    return [Markup.callbackButton(`${date}${item.description}`, `mostrar ${item.id}`)];
   });
 
-  return Extra.markup(Markup.inlineKeyboards(buttons, {columns: 1}));
+  return Extra.markup(Markup.inlineKeyboard(buttons, {columns: 1}));
 };
 
 const buttonsTask = idTask => Extra.HTML().markup(Markup.inlineKeyboard([
@@ -47,3 +47,18 @@ const buttonsTask = idTask => Extra.HTML().markup(Markup.inlineKeyboard([
   Markup.callbackButton('📝', `addNota ${idTask}`),
   Markup.callbackButton('❌', `excluir ${idTask}`)
 ], {columns: 4}));
+
+// Bot commands
+
+bot.command('dia', async ctx => {
+  const tasks = await getSchedule(moment());
+  ctx.reply(`Aqui está a sua agenda do dia:`, buttonsSchedule(tasks));
+});
+
+// Bot actions
+
+bot.action(/mostrar (.+)/, async ctx => {
+  await showTask(ctx, ctx.match[1]);
+});
+
+bot.startPolling();
